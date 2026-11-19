@@ -10,7 +10,7 @@ After installing the native prerequisites below, run the standalone from the pro
 cargo run --release --locked --bin platform-probe-standalone -- --qwerty-keys
 ```
 
-Focus the window, hold **A**, turn **Gain** down and up, then release the key. To use it in a DAW, build the VST3 below. The bundler writes it to `target/bundles/Synth Platform Probe.vst3`.
+Click **Play test tone**, turn **Gain** down and up, then click **Stop test tone**. With computer-keyboard input enabled, you can also hold **A** to play while the keyboard is routed to the standalone window. To use it in a DAW, build the VST3 below. The bundler writes it to `target/bundles/Synth Platform Probe.vst3`.
 
 ## Build from source
 
@@ -36,7 +36,7 @@ To list device names, replace `--qwerty-keys` with `--list-devices` or `--list-m
 
 ## Repeat this check on each OS
 
-1. In standalone, hold **A** or send a MIDI note. Listen, turn Gain down and up, and release. Expect one steady tone, silence at minimum gain and silence after release.
+1. In standalone, click **Play test tone**. Listen, turn Gain down and up, then click **Stop test tone**. Expect one steady tone, silence at minimum gain, and silence when stopped. Also try a MIDI note or hold and release **A** with computer-keyboard input enabled. Record which input worked.
 2. In REAPER's VST preferences, add the absolute path to this checkout's `target/bundles` directory and re-scan. Insert **VST3i: Synth Platform Probe** on an empty track. Add a MIDI item containing a long note and play it.
 3. With track automation in **Touch**, drag Gain down and back up during playback. Switch to **Read**, rewind and play again. Check that the knob and audible level follow the recorded curve.
 4. Set a recognizable gain on a second instance. Save the project, close it, reopen it and replay. Confirm that the first instance follows the automation and the second retains its own setting.
@@ -48,7 +48,7 @@ On macOS 26.6.2, all three Rust tests passed and pluginval 1.0.4 passed the VST3
 
 REAPER 7.86 loaded the instrument and its custom editor. During 48 kHz playback, the note started, muted under gain automation, returned at half its earlier level and stopped on release. A 44.1 kHz stereo WAV bounce confirmed silence in the muted and released sections. After saving and reopening, a second instance recalled its independent 0.625 gain setting. A separate Touch-mode pass captured 52 points from a Gain-knob gesture and restored all 52 on reopen.
 
-The standalone listening check and native Windows and Arch host checks are tracked in the workbook. The [CI workflow](.github/workflows/check.yml) also builds and tests the source on macOS, Windows and Ubuntu.
+The standalone's **Play test tone** button produced sound on the MacBook Air speakers. Computer-keyboard audition on this Mac remains unresolved. The workbook tracks the remaining native Windows and Arch host checks. The [CI workflow](.github/workflows/check.yml) also builds and tests the source on macOS, Windows and Ubuntu.
 
 ## Start the engine
 

@@ -1,6 +1,16 @@
 use std::sync::Arc;
+use std::sync::atomic::{AtomicBool, Ordering};
 use truce::prelude::*;
 use truce_egui::{EguiEditor, widgets::param_knob};
+
+// The standalone runs one probe. The DAW entry point never enables this control.
+static SHOW_AUDITION: AtomicBool = AtomicBool::new(false);
+static AUDITION_PLAYING: AtomicBool = AtomicBool::new(false);
+
+#[cfg(feature = "standalone")]
+pub fn enable_standalone_audition() {
+    SHOW_AUDITION.store(true, Ordering::Relaxed);
+}
 
 #[derive(Params)]
 pub struct ProbeParams {
@@ -40,6 +50,7 @@ impl PluginLogic for PlatformProbe {
         events: &EventList,
         _: &mut ProcessContext,
     ) -> ProcessStatus {
+        let audition_playing = AUDITION_PLAYING.load(Ordering::Relaxed);
         let mut event_index = 0;
         for frame in 0..buffer.num_samples() {
             while let Some(event) = events.get(event_index) {
@@ -62,7 +73,7 @@ impl PluginLogic for PlatformProbe {
                 event_index += 1;
             }
             let mut sample = 0.0;
-            if state.held_note.is_some() {
+            if audition_playing || state.held_note.is_some() {
                 let polarity = if state.frame < state.period / 2 {
                     1.0
                 } else {
@@ -82,9 +93,23 @@ impl PluginLogic for PlatformProbe {
     }
 
     fn editor(params: Arc<ProbeParams>) -> Box<dyn Editor> {
-        EguiEditor::new(params, (240, 150), |ui, context| {
+        let standalone = SHOW_AUDITION.load(Ordering::Relaxed);
+        let height = if standalone { 190 } else { 150 };
+        EguiEditor::new(params, (240, height), move |ui, context| {
             ui.heading("Platform probe");
-            ui.label("Hold a MIDI note to hear the test tone.");
+            if standalone {
+                let playing = AUDITION_PLAYING.load(Ordering::Relaxed);
+                let label = if playing {
+                    "Stop test tone"
+                } else {
+                    "Play test tone"
+                };
+                if ui.button(label).clicked() {
+                    AUDITION_PLAYING.store(!playing, Ordering::Relaxed);
+                }
+            } else {
+                ui.label("Hold a MIDI note to hear the test tone.");
+            }
             param_knob(ui, context, ProbeParamsParamId::Gain, "Gain");
         })
         .into_editor()
