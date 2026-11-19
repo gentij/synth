@@ -1,0 +1,14 @@
+[vendor]
+name = "Synth Project"
+id = "dev.synthproject"
+url = ""
+au_manufacturer = "Snth"
+
+[[plugin]]
+name = "Synth Platform Probe"
+bundle_id = "platform-probe"
+crate = "platform-probe"
+category = "instrument"
+fourcc = "SPrb"
+au_tag = "Synthesizer"
+vst3_subcategory = "Synth"

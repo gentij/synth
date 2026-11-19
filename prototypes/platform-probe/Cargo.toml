@@ -1,0 +1,27 @@
+[package]
+name = "platform-probe"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[[bin]]
+name = "platform-probe-standalone"
+path = "src/main.rs"
+required-features = ["standalone"]
+
+[features]
+default = ["vst3", "standalone"]
+vst3 = ["dep:truce-vst3"]
+standalone = ["dep:truce-standalone"]
+
+[dependencies]
+truce = "=6.3.0"
+truce-egui = "=6.3.0"
+truce-vst3 = { version = "=6.3.0", optional = true }
+truce-standalone = { version = "=6.3.0", features = ["gui"], optional = true }
+
+[dev-dependencies]
+truce-test = "=6.3.0"

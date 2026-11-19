@@ -1,0 +1,15 @@
+/target/
+/outputs/
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+~$*.xlsx
+.~lock.*#
+
+*.reapeaks
+*.[Rr][Pp][Pp]-[Bb][Aa][Kk]
+
+.env
+.env.*
+!.env.example
