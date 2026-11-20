@@ -48,7 +48,15 @@ On macOS 26.6.2, all three Rust tests passed and pluginval 1.0.4 passed the VST3
 
 REAPER 7.86 loaded the instrument and its custom editor. During 48 kHz playback, the note started, muted under gain automation, returned at half its earlier level and stopped on release. A 44.1 kHz stereo WAV bounce confirmed silence in the muted and released sections. After saving and reopening, a second instance recalled its independent 0.625 gain setting. A separate Touch-mode pass captured 52 points from a Gain-knob gesture and restored all 52 on reopen.
 
-The standalone's **Play test tone** button produced sound on the MacBook Air speakers. Computer-keyboard audition on this Mac remains unresolved. The workbook tracks the remaining native Windows and Arch host checks. The [CI workflow](.github/workflows/check.yml) also builds and tests the source on macOS, Windows and Ubuntu.
+The standalone's **Play test tone** button produced sound on the MacBook Air speakers. Computer-keyboard audition on this Mac remains unresolved. The workbook also records the native Windows and Arch host checks. The [CI workflow](.github/workflows/check.yml) also builds and tests the source on macOS, Windows and Ubuntu.
+
+### Verified on Windows x64
+
+On Windows 10 Pro 22H2 (build 19045.6466), the three release tests passed and the baseline VST3 bundle built with Rust 1.92.0 and Truce 6.3.0.
+
+The standalone's **Play test tone** button produced sound on the Razer Game output at 48 kHz. Turning Gain to zero muted the tone, and **Stop test tone** silenced it. The A key produced no sound and the standalone detected no MIDI inputs.
+
+REAPER 7.86 x64 loaded the VST3 editor and played MIDI and Gain automation through the Razer Game output at 48 kHz over WASAPI. A Gain-knob gesture recorded in Touch mode saved 90 points. All 90 returned when the project reopened and drove Gain during playback in Read. A second instance independently recalled its 0.625 Gain setting.
 
 ## Start the engine
 
