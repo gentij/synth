@@ -3,3 +3,6 @@ name = "synth-core"
 version.workspace = true
 edition.workspace = true
 publish.workspace = true
+
+[dev-dependencies]
+hound = "3.5.1"
